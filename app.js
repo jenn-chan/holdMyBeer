@@ -1,6 +1,8 @@
 var express = require("express");
 var app = express();
+var bodyParser = require("body-parser");
 
+app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 var beers =[
@@ -11,11 +13,25 @@ var beers =[
 ]
 
 app.get("/", function(req, res) {
-    res.render("index", {beers: beers}); 
+    res.redirect("/beers"); 
 });
 
-app.get("/test", function(req, res) {
-    res.send("TESTING");
+app.get("/beers", function(req, res) {
+    res.render("index", {beers: beers});
+});
+
+app.get("/beers/new", function(req, res) {
+    res.render("new.ejs");
+});
+
+app.post("/beers", function(req, res) {
+    // get data from form and add to array
+    var name = req.body.name;
+    var image = req.body.image;
+    var newBeer = {name, image};
+    beers.push(newBeer);
+    // redirect back to campground
+    res.redirect("/beers");
 });
 
 app.listen(3000, function() {
