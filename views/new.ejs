@@ -1,0 +1,27 @@
+<%- include("partials/header") %>
+
+<div class="container">
+    <!-- <div class="row"> -->
+        <h1 class="text-center">Create a new beer</h1>
+        <div style="width: 30%; margin: 1rem auto;">
+            <form action="/beers" method="POST">
+                <div class="form-group">
+                    <label for="beerName">Name</label>
+                    <input type="text" name="name" id="beerName">
+                </div>
+            
+                <div class="form-group">
+                    <label for="beerImage">Image</label>
+                    <input type="text" name="image" id="beerImage">
+                </div>
+            
+                <button type="submit" class="btn btn-default btn-primary">Submit</button>
+            </form>
+        </div>
+    
+        <a href="/beers">Back</a>
+    <!-- </ > -->
+</div>
+
+
+<%- include("partials/footer") %>
