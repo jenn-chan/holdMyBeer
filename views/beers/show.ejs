@@ -1,0 +1,33 @@
+<%- include("../partials/header") %>
+
+<div class="container">
+    <h1><%=beer.name%></h1>
+    <img src="<%=beer.image%>">
+    <p><%=beer.description%></p>
+    <a href="/beers">Back</a>
+
+    <h3>Add new comment</h3>
+    <form action="/beers/<%=beer._id%>/comments" method="POST">
+        <div class="form-group">
+            <label for="commentText">Comment</label>
+            <input type="text" name="comment[text]" id="commentText">
+        </div>
+    
+        <div class="form-group">
+            <label for="commentAuthor">Author</label>
+            <input type="text" name="comment[author]" id="commentAuthor">
+        </div>
+    
+        <button type="submit" class="btn btn-default btn-primary">Submit</button>
+    </form>
+
+    <% beer.comments.forEach(function(comment) { %>
+        <div>
+            <h6><%= comment.author %></h6>
+            <p><%= comment.text %></p>
+        </div>
+    <% }) %>
+</div>
+
+
+<%- include("../partials/footer") %>
