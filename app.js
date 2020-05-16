@@ -1,10 +1,10 @@
-var express = require("express"); // web server framework we're using
-var app = express();
-var bodyParser = require("body-parser"); // to parse info from a post request
-var mongoose = require("mongoose");
-var Beer = require("./models/beer");
-var Comment = require("./models/comment");
-var seedDB = require("./seeds");
+const express = require("express"); // web server framework we're using
+const app = express();
+const bodyParser = require("body-parser"); // to parse info from a post request
+const mongoose = require("mongoose");
+const Beer = require("./models/beer");
+const Comment = require("./models/comment");
+//var seedDB = require("./seeds");
 
 //seedDB();
 
@@ -12,7 +12,8 @@ var seedDB = require("./seeds");
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect("mongodb://localhost/beer_diary", { useNewUrlParser: true });
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json()); // parse JSON request body to be able to call res.json
+app.use(bodyParser.urlencoded({extended: true})); // parsing bodies from url (key-val pairs)
 app.set("view engine", "ejs");
 
 
