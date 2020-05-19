@@ -5,6 +5,12 @@
     <img src="<%=beer.image%>">
     <p><%=beer.description%></p>
     <p><em>Submitted By</em> <%= beer.author.username %></5></p>
+    <% if(currentUser && currentUser.id == beer.author.id) { %>
+        <a class="btn btn-primary" href="/beers/<%= beer._id %>/edit">Edit</a>
+        <form action="/beers/<%= beer._id %>/?_method=DELETE" method="POST">
+            <button class="btn btn-danger">Delete</button>
+        </form>
+    <% } %>
     <a href="/beers">Back</a>
 
     <% if (currentUser) { %>

@@ -4,6 +4,7 @@ const bodyParser = require("body-parser"); // to parse info from a post request
 const mongoose = require("mongoose");
 const passport = require("passport");   // authentication middleware for node.js with different strategies (login, fb, twitter, etc.)
 const LocalStrategy = require("passport-local"); // local strategy = username and passpord
+const methodOverride = require("method-override");  // let you use put and delete post methods with clients that don't support
 const Beer = require("./models/beer");
 const User = require("./models/user");
 const Comment = require("./models/comment");
@@ -13,16 +14,19 @@ const beerRoutes = require("./routes/beers");
 const commentRoutes = require("./routes/comments");
 const indexRoutes = require("./routes/index");
 
-var seedDB = require("./seeds");
-seedDB();
+// var seedDB = require("./seeds");
+// seedDB();
 
 // Mongoose settings
 mongoose.set('useUnifiedTopology', true);
+mongoose.set('useFindAndModify', false);
 mongoose.connect("mongodb://localhost/beer_diary", { useNewUrlParser: true });
 
 app.use(bodyParser.json()); // parse JSON request body to be able to call res.json
 app.use(bodyParser.urlencoded({extended: true})); // parsing bodies from url (key-val pairs)
 app.set("view engine", "ejs");
+app.use(express.static(__dirname + "/public")); // dirname = directory of where script is running
+app.use(methodOverride("_method")); // override method with a query string (ex: ?_method=PUT)
 
 // Passport Configuration
 app.use(require("express-session")({    // need to include seperate package for session and express

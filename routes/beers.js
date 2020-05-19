@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Beer = require("../models/beer");
+const Comment = require("../models/comment");
 
 router.get("/", function(req, res) {
     Beer.find({}, function(err, allBeers) {
@@ -20,15 +21,12 @@ router.get("/new", isLoggedIn, function(req, res) {
 
 // Create route - adding a new beer
 router.post("/", function(req, res) {
-    // get data from form and add to array
-    var name = req.body.name;
-    var image = req.body.image;
-    var desc = req.body.description;
-    var newBeer = {name: name, image: image, desc: desc};
+    var newBeer = req.body.beer;
     newBeer.author = {
         id: req.user._id,
         username: req.user.username
     }
+    console.log(newBeer);
     // Create a new beer and save to DB
     Beer.create(newBeer, function(err, newBeer) {
         if (err) {
@@ -52,6 +50,48 @@ router.get("/:id", function(req, res) {
         }
     });
 });
+
+// edit route
+router.get("/:id/edit", function(req, res) {
+    Beer.findById(req.params.id, function(err, foundBeer) {
+        if (err) {
+            console.log(err);
+            return res.redirect("/beers");
+        }
+        res.render("beers/edit", {beer : foundBeer});
+    });
+});
+
+// update route
+router.put("/:id", function(req, res) {
+    // find and update beer
+    Beer.findByIdAndUpdate(req.params.id, req.body.beer, function(err, updatedBeer) {
+        if(err) {
+            console.log(err);
+            return res.redirect("/beers");
+        }
+        res.redirect("/beers/" + req.params.id);
+    });
+    // redirect
+});
+
+// destroy route
+router.delete("/:id", function(req, res) {
+    Beer.findByIdAndRemove(req.params.id, function(err, removedBeer) {
+        if(err) {
+            console.log(err);
+            return res.redirect("/beers");
+        }
+
+        // Delete its comments
+        Comment.deleteMany( {_id: { $in: removedBeer.comments } }, function(err) {
+            if (err) {
+                console.log(err);
+            }
+            res.redirect("/campgrounds");
+        });
+    })
+})
 
 // middleware
 function isLoggedIn(req, res, next) {
