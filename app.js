@@ -38,18 +38,24 @@ passport.use(new LocalStrategy(User.authenticate())); // using locaal strategy
 passport.serializeUser(User.serializeUser()); // setting id as cookie in user's browser (encoding)
 passport.deserializeUser(User.deserializeUser()); // getting id from cookie => used in callback to get user info (decoding)
 
+// whatever function we pass in app.use will be called in every route
+app.use(function(req, res, next) {
+    // want every route to have access to req.user
+    res.locals.currentUser = req.user;
+    next();
+});
+
 app.get("/", function(req, res) {
     res.redirect("/beers"); 
 });
 
 // Index route - show all beers
 app.get("/beers", function(req, res) {
-    //res.render("beers", {beers: beers});
     Beer.find({}, function(err, allBeers) {
         if (err) {
             console.log(err);
         } else {
-            res.render("beers/beers", {beers: allBeers});
+            res.render("beers/beers", {beers: allBeers, currentUser: req.user});
         }
     })
 });
@@ -62,7 +68,7 @@ app.get("/register", function(req, res) {
 // handle sign up logic
 app.post("/register", function(req, res) {
     var newUser = new User({username: req.body.username});
-    // User.register will handle the logic of hashing the password
+    // User.register will make a new user and handle the logic of hashing the password
     User.register(newUser, req.body.password, function(err, user) {
         if (err) {
             console.log(err);
@@ -80,8 +86,32 @@ app.get("/login", function(req, res) {
     res.render("login");
 });
 
+// after logging in, passport will put the username and id in req.user
+// calling passport.authenticate => will use the method from the passport-local-mongoose package on User obj
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/beers",
+    failureRedirect: "/login",
+    //failureFlash: true
+}));
+
+// logout
+app.get("/logout", function(req, res) {
+    req.logout();
+    res.redirect("/beers");
+});
+
+// middleware
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+
+    res.redirect("/login");
+}
+
+// call middleware first and then continue to callback if logged in
 // New route - show form to create a new beer
-app.get("/beers/new", function(req, res) {
+app.get("/beers/new", isLoggedIn, function(req, res) {
     res.render("beers/new");
 });
 
@@ -116,7 +146,7 @@ app.get("/beers/:id", function(req, res) {
 });
 
 //==== COMMENTS ROUTES ======
-app.post("/beers/:id/comments", function(req, res) {
+app.post("/beers/:id/comments", isLoggedIn, function(req, res) {
     // look up beer using id
     Beer.findById(req.params.id, function(err, foundBeer) {
         if (err) {
