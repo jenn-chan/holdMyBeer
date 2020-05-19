@@ -8,6 +8,11 @@ const Beer = require("./models/beer");
 const User = require("./models/user");
 const Comment = require("./models/comment");
 
+// requiring routes
+const beerRoutes = require("./routes/beers");
+const commentRoutes = require("./routes/comments");
+const indexRoutes = require("./routes/index");
+
 //var seedDB = require("./seeds");
 
 //seedDB();
@@ -45,130 +50,10 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get("/", function(req, res) {
-    res.redirect("/beers"); 
-});
-
-// Index route - show all beers
-app.get("/beers", function(req, res) {
-    Beer.find({}, function(err, allBeers) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("beers/beers", {beers: allBeers, currentUser: req.user});
-        }
-    })
-});
-
-// AUTH Routes
-// show register form
-app.get("/register", function(req, res) {
-    res.render("register");
-});
-// handle sign up logic
-app.post("/register", function(req, res) {
-    var newUser = new User({username: req.body.username});
-    // User.register will make a new user and handle the logic of hashing the password
-    User.register(newUser, req.body.password, function(err, user) {
-        if (err) {
-            console.log(err);
-            return res.render("register");
-        }
-        // once user is signed up, will log them in (authenticate)
-        passport.authenticate("local")(req, res, function() {
-            res.redirect("/beers");
-        });
-    }) 
-});
-
-// show login form
-app.get("/login", function(req, res) {
-    res.render("login");
-});
-
-// after logging in, passport will put the username and id in req.user
-// calling passport.authenticate => will use the method from the passport-local-mongoose package on User obj
-app.post("/login", passport.authenticate("local", {
-    successRedirect: "/beers",
-    failureRedirect: "/login",
-    //failureFlash: true
-}));
-
-// logout
-app.get("/logout", function(req, res) {
-    req.logout();
-    res.redirect("/beers");
-});
-
-// middleware
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-
-    res.redirect("/login");
-}
-
-// call middleware first and then continue to callback if logged in
-// New route - show form to create a new beer
-app.get("/beers/new", isLoggedIn, function(req, res) {
-    res.render("beers/new");
-});
-
-// Create route - adding a new beer
-app.post("/beers", function(req, res) {
-    // get data from form and add to array
-    var name = req.body.name;
-    var image = req.body.image;
-    var desc = req.body.description;
-    var newBeer = {name: name, image: image, desc: desc};
-    // Create a new beer and save to DB
-    Beer.create(newBeer, function(err, newBeer) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.redirect("/beers");
-        }
-    });
-});
-
-// viewing beer details - make sure to put after new route 
-// * new is technically after /beers/
-app.get("/beers/:id", function(req, res) {
-    // find campground with the id and populate with comments obj connected to this beer obj
-    Beer.findById(req.params.id).populate("comments").exec(function(err, foundBeer) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("beers/show", {beer: foundBeer});
-        }
-    });
-});
-
-//==== COMMENTS ROUTES ======
-app.post("/beers/:id/comments", isLoggedIn, function(req, res) {
-    // look up beer using id
-    Beer.findById(req.params.id, function(err, foundBeer) {
-        if (err) {
-            console.log(err);
-            return res.redirect("/beers");
-        } 
-
-        // create new comment
-        var comment = req.body.comment;
-        Comment.create(comment, function(err, newComment) {
-            if (err) {
-                console.log(err);
-                return res.redirect("/beers");
-            } 
-
-            // connect new comment to beer
-            foundBeer.comments.push(newComment);
-            foundBeer.save();
-            res.redirect("/beers/" + foundBeer._id);
-        });
-    });
-});
+// using the routes we required (append comment parts to clean up code)
+app.use("/beers", beerRoutes);
+app.use("/beers/:id/comments", commentRoutes);
+app.use(indexRoutes);
 
 app.listen(3000, function() {
     console.log("Server started!");
