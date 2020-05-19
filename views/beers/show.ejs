@@ -5,7 +5,7 @@
     <img src="<%=beer.image%>">
     <p><%=beer.description%></p>
     <p><em>Submitted By</em> <%= beer.author.username %></5></p>
-    <% if(currentUser && currentUser.id == beer.author.id) { %>
+    <% if(currentUser && beer.author.id.equals(currentUser.id)) { %>
         <a class="btn btn-primary" href="/beers/<%= beer._id %>/edit">Edit</a>
         <form action="/beers/<%= beer._id %>/?_method=DELETE" method="POST">
             <button class="btn btn-danger">Delete</button>
@@ -13,7 +13,7 @@
     <% } %>
     <a href="/beers">Back</a>
 
-    <% if (currentUser) { %>
+    <% if(currentUser) { %>
         <h3>Add new comment</h3>
         <form action="/beers/<%=beer._id%>/comments" method="POST">
             <div class="form-group">
@@ -29,6 +29,11 @@
         <div>
             <h6><%= comment.author.username %></h6>
             <p><%= comment.text %></p>
+            <% if(currentUser && comment.author.id.equals(currentUser.id)) { %>
+                <form action="/beers/<%= beer._id %>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            <% } %>
         </div>
     <% }) %>
 </div>

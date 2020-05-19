@@ -33,6 +33,20 @@ router.post("/", isLoggedIn, function(req, res) {
     });
 });
 
+// edit route
+
+// update route
+// delete route
+router.delete("/:id", checkCommentOwnership, function(req, res) {
+    // console.log(req.baseUrl);
+    // var beerId = 
+    Comment.findByIdAndRemove(req.params.id, function(err, removedComment) {
+        if(err) console.log(err);
+        return res.redirect("back");
+    });
+    
+});
+
 // middleware
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -40,6 +54,30 @@ function isLoggedIn(req, res, next) {
     }
 
     res.redirect("/login");
+}
+
+function checkCommentOwnership(req, res, next) {
+    // is user logged in
+    if (req.isAuthenticated()) {
+        // find comment with that id
+        Comment.findById(req.params.id, function(err, foundComment) {
+            if(err) {
+                console.log(err);
+                res.redirect("back");
+            } else {
+                // does user own the comment
+                if (foundComment.author.id.equals(req.user._id)) {
+                    next();
+                } else {
+                    console.log("user doesn't have permission");
+                    res.redirect("back");
+                }
+            }
+        })
+    } else {
+        console.log("Uesr need to be logged in");
+        res.redirect("back");
+    }
 }
 
 module.exports = router;

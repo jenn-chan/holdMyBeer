@@ -52,18 +52,14 @@ router.get("/:id", function(req, res) {
 });
 
 // edit route
-router.get("/:id/edit", function(req, res) {
+router.get("/:id/edit", checkBeerOwnership, function(req, res) {
     Beer.findById(req.params.id, function(err, foundBeer) {
-        if (err) {
-            console.log(err);
-            return res.redirect("/beers");
-        }
         res.render("beers/edit", {beer : foundBeer});
     });
 });
 
 // update route
-router.put("/:id", function(req, res) {
+router.put("/:id", checkBeerOwnership, function(req, res) {
     // find and update beer
     Beer.findByIdAndUpdate(req.params.id, req.body.beer, function(err, updatedBeer) {
         if(err) {
@@ -76,7 +72,7 @@ router.put("/:id", function(req, res) {
 });
 
 // destroy route
-router.delete("/:id", function(req, res) {
+router.delete("/:id", checkBeerOwnership, function(req, res) {
     Beer.findByIdAndRemove(req.params.id, function(err, removedBeer) {
         if(err) {
             console.log(err);
@@ -88,7 +84,7 @@ router.delete("/:id", function(req, res) {
             if (err) {
                 console.log(err);
             }
-            res.redirect("/campgrounds");
+            res.redirect("/beers");
         });
     })
 })
@@ -99,6 +95,30 @@ function isLoggedIn(req, res, next) {
         return next();
     }
     res.redirect("/login");
+}
+
+function checkBeerOwnership(req, res, next) {
+    // is user logged in
+    if (req.isAuthenticated()) {
+        // find campground with the id 
+        Beer.findById(req.params.id, function(err, foundBeer) {
+            if (err) {
+                console.log(err);
+                res.redirect("back");
+            } else {
+                // does user own the campground
+                if (foundBeer.author.id.equals(req.user._id)) { // *.equals is only from mongoose plugin (so req.user.id doesn't have a .equals method)
+                    next();
+                } else {
+                    console.log("user doesn't have permission");
+                    res.redirect("back");
+                }
+            }
+        });
+    } else {
+        console.log("User need to be logged in to do that");
+        res.redirect("back");
+    }
 }
 
 
