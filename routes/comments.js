@@ -34,17 +34,28 @@ router.post("/", isLoggedIn, function(req, res) {
 });
 
 // edit route
+router.get("/:comment_id/edit", checkCommentOwnership, function(req, res) {
+    Comment.findById(req.params.comment_id, function(err, foundComment) {
+        res.render("comments/edit", {beer_id: req.params.id, comment:foundComment});
+    });
+});
 
 // update route
-// delete route
-router.delete("/:id", checkCommentOwnership, function(req, res) {
-    // console.log(req.baseUrl);
-    // var beerId = 
-    Comment.findByIdAndRemove(req.params.id, function(err, removedComment) {
-        if(err) console.log(err);
-        return res.redirect("back");
+router.put("/:comment_id", checkCommentOwnership, function(req, res) {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment) {
+        if(err) {
+            console.log(err);
+        }
+        return res.redirect("/beers/" + req.params.id);
     });
-    
+});
+
+// delete route
+router.delete("/:comment_id", checkCommentOwnership, function(req, res) {
+    Comment.findByIdAndRemove(req.params.comment_id, function(err, removedComment) {
+        if(err) console.log(err);
+        return res.redirect("/beers/" + req.params.id);
+    });
 });
 
 // middleware
@@ -60,7 +71,7 @@ function checkCommentOwnership(req, res, next) {
     // is user logged in
     if (req.isAuthenticated()) {
         // find comment with that id
-        Comment.findById(req.params.id, function(err, foundComment) {
+        Comment.findById(req.params.comment_id, function(err, foundComment) {
             if(err) {
                 console.log(err);
                 res.redirect("back");

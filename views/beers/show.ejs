@@ -30,6 +30,7 @@
             <h6><%= comment.author.username %></h6>
             <p><%= comment.text %></p>
             <% if(currentUser && comment.author.id.equals(currentUser.id)) { %>
+                <a class="btn btn-primary" href="/beers/<%= beer._id %>/comments/<%=comment._id%>/edit">Edit</a>
                 <form action="/beers/<%= beer._id %>/comments/<%=comment._id%>?_method=DELETE" method="POST">
                     <button class="btn btn-danger">Delete</button>
                 </form>
