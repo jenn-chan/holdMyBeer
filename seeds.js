@@ -36,20 +36,20 @@ async function seedDB() {
         await Comment.deleteMany({});
         await Beer.deleteMany({});
 
-        for(var seed of seeds) {
-            let beer = await Beer.create(seed);
-            console.log("added beer!");
+        // for(var seed of seeds) {
+        //     let beer = await Beer.create(seed);
+        //     console.log("added beer!");
 
-            let comment = await Comment.create({
-                text: 'This is one of the best beers!',
-                author: 'Jennifer'
-            });
-            console.log("created comment!");
+        //     let comment = await Comment.create({
+        //         text: 'This is one of the best beers!',
+        //         author: 'Jennifer'
+        //     });
+        //     console.log("created comment!");
 
-            beer.comments.push(comment);
-            beer.save();
-            console.log("beer save--");
-        }
+        //     beer.comments.push(comment);
+        //     beer.save();
+        //     console.log("beer save--");
+        // }
     } catch(err) {
         console.log(err);
     }

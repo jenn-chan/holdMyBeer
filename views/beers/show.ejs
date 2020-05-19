@@ -4,6 +4,7 @@
     <h1><%=beer.name%></h1>
     <img src="<%=beer.image%>">
     <p><%=beer.description%></p>
+    <p><em>Submitted By</em> <%= beer.author.username %></5></p>
     <a href="/beers">Back</a>
 
     <% if (currentUser) { %>
@@ -14,18 +15,13 @@
                 <input type="text" name="comment[text]" id="commentText">
             </div>
         
-            <div class="form-group">
-                <label for="commentAuthor">Author</label>
-                <input type="text" name="comment[author]" id="commentAuthor">
-            </div>
-        
             <button type="submit" class="btn btn-default btn-primary">Submit</button>
         </form>
     <% } %>
 
     <% beer.comments.forEach(function(comment) { %>
         <div>
-            <h6><%= comment.author %></h6>
+            <h6><%= comment.author.username %></h6>
             <p><%= comment.text %></p>
         </div>
     <% }) %>

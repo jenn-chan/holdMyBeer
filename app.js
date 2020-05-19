@@ -13,9 +13,8 @@ const beerRoutes = require("./routes/beers");
 const commentRoutes = require("./routes/comments");
 const indexRoutes = require("./routes/index");
 
-//var seedDB = require("./seeds");
-
-//seedDB();
+var seedDB = require("./seeds");
+seedDB();
 
 // Mongoose settings
 mongoose.set('useUnifiedTopology', true);

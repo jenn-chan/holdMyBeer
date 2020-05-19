@@ -19,7 +19,12 @@ router.post("/", isLoggedIn, function(req, res) {
                 console.log(err);
                 return res.redirect("/beers");
             } 
-
+            // add username and id to comment
+            newComment.author = {
+                id: req.user._id,
+                username: req.user.username
+            }
+            newComment.save();
             // connect new comment to beer
             foundBeer.comments.push(newComment);
             foundBeer.save();

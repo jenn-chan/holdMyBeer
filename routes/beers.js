@@ -25,11 +25,16 @@ router.post("/", function(req, res) {
     var image = req.body.image;
     var desc = req.body.description;
     var newBeer = {name: name, image: image, desc: desc};
+    newBeer.author = {
+        id: req.user._id,
+        username: req.user.username
+    }
     // Create a new beer and save to DB
     Beer.create(newBeer, function(err, newBeer) {
         if (err) {
             console.log(err);
         } else {
+            // add username and id to beer
             res.redirect("/beers");
         }
     });
