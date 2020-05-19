@@ -54,6 +54,32 @@ app.get("/beers", function(req, res) {
     })
 });
 
+// AUTH Routes
+// show register form
+app.get("/register", function(req, res) {
+    res.render("register");
+});
+// handle sign up logic
+app.post("/register", function(req, res) {
+    var newUser = new User({username: req.body.username});
+    // User.register will handle the logic of hashing the password
+    User.register(newUser, req.body.password, function(err, user) {
+        if (err) {
+            console.log(err);
+            return res.render("register");
+        }
+        // once user is signed up, will log them in (authenticate)
+        passport.authenticate("local")(req, res, function() {
+            res.redirect("/beers");
+        });
+    }) 
+});
+
+// show login form
+app.get("/login", function(req, res) {
+    res.render("login");
+});
+
 // New route - show form to create a new beer
 app.get("/beers/new", function(req, res) {
     res.render("beers/new");
