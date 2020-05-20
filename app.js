@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const passport = require("passport");   // authentication middleware for node.js with different strategies (login, fb, twitter, etc.)
 const LocalStrategy = require("passport-local"); // local strategy = username and passpord
 const methodOverride = require("method-override");  // let you use put and delete post methods with clients that don't support
+const flash = require("connect-flash");
 const Beer = require("./models/beer");
 const User = require("./models/user");
 const Comment = require("./models/comment");
@@ -27,6 +28,7 @@ app.use(bodyParser.urlencoded({extended: true})); // parsing bodies from url (ke
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public")); // dirname = directory of where script is running
 app.use(methodOverride("_method")); // override method with a query string (ex: ?_method=PUT)
+app.use(flash());
 
 // Passport Configuration
 app.use(require("express-session")({    // need to include seperate package for session and express
@@ -50,6 +52,9 @@ passport.deserializeUser(User.deserializeUser()); // getting id from cookie => u
 app.use(function(req, res, next) {
     // want every route to have access to req.user
     res.locals.currentUser = req.user;
+    // want every route to have flash message
+    res.locals.errorMsg = req.flash("error");
+    res.locals.successMsg = req.flash("success");
     next();
 });
 

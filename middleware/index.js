@@ -8,7 +8,8 @@ middlewareObj.isLoggedIn = function(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-
+    console.log("doing flash rn");
+    req.flash("error", "Please login first!");
     res.redirect("/login");
 }
 
@@ -31,8 +32,8 @@ middlewareObj.checkBeerOwnership = function(req, res, next) {
             }
         });
     } else {
-        console.log("User need to be logged in to do that");
-        res.redirect("back");
+        req.flash("error", "Please login first!");
+        res.redirect("/login");
     }
 }
 
