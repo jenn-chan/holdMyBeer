@@ -22,12 +22,17 @@ middlewareObj.checkBeerOwnership = function(req, res, next) {
                 console.log(err);
                 res.redirect("back");
             } else {
+                // If user edit url (which contains id of beer obj)
+                if (!foundBeer) {
+                    req.flash("error", "Item not found.");
+                    return res.redirect("back");
+                }
                 // does user own the campground
                 if (foundBeer.author.id.equals(req.user._id)) { // *.equals is only from mongoose plugin (so req.user.id doesn't have a .equals method)
                     next();
                 } else {
                     console.log("user doesn't have permission");
-                    res.redirect("back");
+                    res.redirect("/beers");
                 }
             }
         });
@@ -46,6 +51,12 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
                 console.log(err);
                 res.redirect("back");
             } else {
+                // If user edit url (which contains id of comment obj)
+                if (!foundComment) {
+                    req.flash("error", "Item not found.");
+                    return res.redirect("/beers");
+                }
+
                 // does user own the comment
                 if (foundComment.author.id.equals(req.user._id)) {
                     next();
