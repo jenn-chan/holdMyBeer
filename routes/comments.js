@@ -50,7 +50,7 @@ router.put("/:comment_id", checkCommentOwnership, function(req, res) {
     });
 });
 
-// delete route
+// destroy route
 router.delete("/:comment_id", checkCommentOwnership, function(req, res) {
     Comment.findByIdAndRemove(req.params.comment_id, function(err, removedComment) {
         if(err) console.log(err);
