@@ -5,6 +5,13 @@ var beerSchema = new mongoose.Schema({
     name: String,
     image: String,
     description: String,
+    author: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User" // ref = refers to the model being used
+        },
+        username: String
+    },
     comments: [ // array of comment ids
         {
             type: mongoose.Schema.Types.ObjectId,

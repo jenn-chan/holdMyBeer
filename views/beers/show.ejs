@@ -4,19 +4,21 @@
     <h1><%=beer.name%></h1>
     <img src="<%=beer.image%>">
     <p><%=beer.description%></p>
+    <p><em>Submitted By</em> <%= beer.author.username %></5></p>
+    <% if(currentUser && beer.author.id.equals(currentUser.id)) { %>
+        <a class="btn btn-primary" href="/beers/<%= beer._id %>/edit">Edit</a>
+        <form action="/beers/<%= beer._id %>/?_method=DELETE" method="POST">
+            <button class="btn btn-danger">Delete</button>
+        </form>
+    <% } %>
     <a href="/beers">Back</a>
 
-    <% if (currentUser) { %>
+    <% if(currentUser) { %>
         <h3>Add new comment</h3>
         <form action="/beers/<%=beer._id%>/comments" method="POST">
             <div class="form-group">
                 <label for="commentText">Comment</label>
                 <input type="text" name="comment[text]" id="commentText">
-            </div>
-        
-            <div class="form-group">
-                <label for="commentAuthor">Author</label>
-                <input type="text" name="comment[author]" id="commentAuthor">
             </div>
         
             <button type="submit" class="btn btn-default btn-primary">Submit</button>
@@ -25,8 +27,14 @@
 
     <% beer.comments.forEach(function(comment) { %>
         <div>
-            <h6><%= comment.author %></h6>
+            <h6><%= comment.author.username %></h6>
             <p><%= comment.text %></p>
+            <% if(currentUser && comment.author.id.equals(currentUser.id)) { %>
+                <a class="btn btn-primary" href="/beers/<%= beer._id %>/comments/<%=comment._id%>/edit">Edit</a>
+                <form action="/beers/<%= beer._id %>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            <% } %>
         </div>
     <% }) %>
 </div>
