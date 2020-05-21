@@ -7,7 +7,7 @@ App to keep track of beers you've tried and share with other users. Write descri
 * EJS
 * Bootstrap 4.5
 
-## Setup
+## Setup Server
 * `npm install` to install all required dependencies 
 * Install MongoDB Community Edition and run it by executing `mongod`
   * More instructions ([VideoLink](https://www.youtube.com/watch?v=MCpbfYvvoPY))
