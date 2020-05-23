@@ -1,4 +1,54 @@
 .card img {
     width: 100%;
 }
+
+#beerHome {
+    /* background: #fabc3c; */
+}
+
+.customBtn {
+    background-color: rgba(255,136,17,.85);
+    border-color: rgba(255,136,17,.85);
+    /* background-color: blue; */
+    color: white;
+}
+
+.customBtn:hover {
+    background-color: rgba(255,136,17,1);
+    border-color: rgba(255,136,17,1);
+    color: white;
+}
+
+.customLink {
+    color: #e2711d;
+}
+
+.customLink:hover {
+    color: #ff8811;
+}
+
+.formCenter{
+    justify-content: center;
+}
     
+textarea {
+    resize: none;
+    height: 10rem !important;
+}
+
+.submitBtn {
+    font-size: 1.5rem;
+}
+    
+.backBtn {
+    margin-top: 1rem;
+}
+
+.jumbotron {
+    background-color: #FABC3C;
+    border-radius: unset;
+}
+
+.customNav {
+    background-color: #FABC3C;
+}
