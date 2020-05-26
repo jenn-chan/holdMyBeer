@@ -27,7 +27,7 @@ router.post("/", function(req, res) {
         id: req.user._id,
         username: req.user.username
     }
-    console.log(newBeer);
+    
     // Create a new beer and save to DB
     Beer.create(newBeer, function(err, newBeer) {
         if (err) {

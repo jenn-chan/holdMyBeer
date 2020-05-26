@@ -1,27 +1,28 @@
 <%- include("../partials/header") %>
 
+
+<header class="jumbotron">
+    <div class="container">
+        <a class="btn btn-lg shadow-sm customBtn" href="/beers/new">Add New Beer</a>
+    </div>            
+</header>
+
 <div class="container">
-    <header class="jumbotron">
-        <div class="container">
-            <h1>Hold My Beer</h1>
-            <p>... while I put it in my beer diary</p>
-            <p><a class="btn btn-primary btn-larg" href="/beers/new">Add New Beer</a></p>
-        </div>
-    </header>
-    
     <div class="row">
         <% beers.forEach(function(beer) { %>
-            <div class="col-md-4 col-sm-6">
+            <div class="col-md-4 col-sm-12">
                 <div class="card mb-4 shadow-sm">
                     <img class="card-img-top" src='<%= beer.image %>'> 
                     <div class="card-body">
                         <h4 class="card-title text-center"><%= beer.name %></h4>
-                        <a href="/beers/<%= beer._id %>" class="card-link">View Details</a>
+                        <a href="/beers/<%= beer._id %>" class="card-link customLink">View Details</a>
                     </div>
                 </div>
             </div>
         <% }); %>
     </div>
 </div>
+
+
 
 <%- include("../partials/footer") %>

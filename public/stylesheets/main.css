@@ -1,15 +1,47 @@
+#mainNavbar {
+    background-color: #FABC3C;
+}
+
+#mainNavbar .nav-link {
+    color: white;
+}
+
+#mainNavbar .nav-link:hover {
+    color: #343330;
+}
+
+#mainNavbar .navbar-brand {
+    display: inline-flex;
+    align-items: center;
+}
+
+
+/********* Beer Home ************/
+.jumbotron {
+    background-color: #FABC3C;
+    border-radius: unset;
+}
+
 .card img {
     width: 100%;
 }
 
-#beerHome {
-    /* background: #fabc3c; */
+/******** Buttons ***********/
+.formBtn {
+    background-color: rgba(250,188,60,.85);
+    border-color: rgba(250,188,60,.85);
+    color: white;
+}
+
+.formBtn:hover {
+    background-color: rgba(250,188,60,1);
+    border-color: rgba(250,188,60,1);
+    color: white;
 }
 
 .customBtn {
     background-color: rgba(255,136,17,.85);
     border-color: rgba(255,136,17,.85);
-    /* background-color: blue; */
     color: white;
 }
 
@@ -27,6 +59,16 @@
     color: #ff8811;
 }
 
+.submitBtn {
+    font-size: 1.5rem;
+}
+    
+.backBtn {
+    margin-top: 1rem;
+}
+
+
+/********* Forms **************/
 .formCenter{
     justify-content: center;
 }
@@ -36,19 +78,36 @@ textarea {
     height: 10rem !important;
 }
 
-.submitBtn {
-    font-size: 1.5rem;
-}
-    
-.backBtn {
-    margin-top: 1rem;
-}
-
-.jumbotron {
-    background-color: #FABC3C;
-    border-radius: unset;
-}
-
-.customNav {
+/*********** Colors ********/
+.mainBg {
     background-color: #FABC3C;
 }
+
+.eggBg {
+    background-color: #F0EAD6;
+}
+
+.darkBg {
+    background-color: #343330;
+}
+
+/********* Beer Show **********/
+#beerShow img {
+    width: 100%;
+}
+
+.btnForm {
+    display: inline;
+}
+
+.comments {
+    margin-bottom: 2rem;
+    padding: 1rem;
+}
+
+@media (max-width: 576px) {
+    #beerShow {
+        padding: 0;
+    }
+}
+

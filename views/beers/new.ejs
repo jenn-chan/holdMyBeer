@@ -1,31 +1,29 @@
 <%- include("../partials/header") %>
 
-<div class="container">
-    <!-- <div class="row"> -->
-        <h1 class="text-center">Create a new beer</h1>
-        <div style="width: 30%; margin: 1rem auto;">
+<div class="container mt-5">
+    <h1 class="text-center mb-3">Add New Beer</h1>
+    <div class="row formCenter">
+        <div class="col-md-5">
             <form action="/beers" method="POST">
-                <div class="form-group">
-                    <label for="beerName">Name</label>
-                    <input type="text" name="beer[name]" id="beerName">
+                <div class="form-group input-group-lg">
+                    <input class="form-control" type="text" name="beer[name]" id="beerName" placeholder="Beer Name">
                 </div>
             
-                <div class="form-group">
-                    <label for="beerImage">Image</label>
-                    <input type="text" name="beer[image]" id="beerImage">
+                <div class="form-group input-group-lg">
+                    <input class="form-control" type="text" name="beer[image]" id="beerImage" placeholder="Beer Image Url">
                 </div>
 
-                <div class="form-group">
-                    <label for="beerDesc">Description</label>
-                    <input type="text" name="beer[description]" id="beerDesc">
+                <div class="form-group input-group-lg">
+                    <textarea class="form-control" name="beer[description]" id="beerDesc" row="3" placeholder="Beer Description"></textarea>
                 </div>
             
-                <button type="submit" class="btn btn-default btn-primary">Submit</button>
+                <button type="submit" class="btn btn-block customBtn submitBtn">Add</button>
+                <p class="backBtn">
+                    <a href="/beers">Back</a>
+                </p>
             </form>
         </div>
-    
-        <a href="/beers">Back</a>
-    <!-- </ > -->
+    </div>
 </div>
 
 
