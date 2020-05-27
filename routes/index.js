@@ -52,4 +52,9 @@ router.get("/logout", function(req, res) {
     res.redirect("/beers");
 });
 
+// error page
+router.get("*", function(req, res) {
+    res.render("error");
+});
+
 module.exports = router;
