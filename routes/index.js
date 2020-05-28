@@ -6,7 +6,7 @@ const User = require("../models/user");
 
 // Root route
 router.get("/", function(req, res) {
-    res.redirect("/beers"); 
+    res.render("landing"); 
 });
 
 // ==============
